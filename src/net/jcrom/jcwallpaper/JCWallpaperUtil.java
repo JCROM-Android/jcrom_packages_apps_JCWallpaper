@@ -36,7 +36,11 @@ public class JCWallpaperUtil {
     int lastOrientation;
     boolean unloadImages = false;
     Integer density = null;
-    
+    boolean mBattery = false;
+    boolean mTime = false;
+
+    private static final String TAG = "JCWallpaper";
+
     public JCWallpaperUtil(WallpaperService service, JCWallpaperService.JCWallpaperEngine engine) {
     	this.service = service;
     	this.engine = engine;
@@ -81,6 +85,8 @@ public class JCWallpaperUtil {
         
         int width = canvas.getWidth();
         int height = canvas.getHeight();
+
+		//compensateForBar = true;
         
         if(compensateForBar) {
             int fullScreenWidth = -1;
@@ -101,9 +107,9 @@ public class JCWallpaperUtil {
                 }
                 
                 if(fullScreenWidth == -1 || fullScreenHeight == -1) {
-                    Method mGetRealSize = Display.class.getMethod("getRealSize");
                     Point size = new Point();
-                    mGetRealSize.invoke(display, new Object[]{ size });
+                    display.getRealSize(size);
+
                     if(size.x > 0 && size.y > 0) {
                         fullScreenWidth = size.x;
                         fullScreenHeight = size.y;
@@ -255,12 +261,56 @@ public class JCWallpaperUtil {
         return BitmapFactory.decodeFile(filePath);        
     }
 
+    public void setBattery(boolean set) {
+        mBattery = set;
+    }
+    public boolean getBattery() {
+        return mBattery;
+    }
+
+    public void setTime(boolean set) {
+        mTime = set;
+    }
+    public boolean getTime() {
+        return mTime;
+    }
+
     public void loadLandscapeImage() {
-        imageLandscape = loadImage("home_wallpaper_land.png");
+        if(mBattery) {
+            if(mTime) {
+                imageLandscape = loadImage("home_wallpaper_time_battery_land.png");
+            } else {
+                imageLandscape = loadImage("home_wallpaper_battery_land.png");
+            }
+        } else {
+            if(mTime) {
+                imageLandscape = loadImage("home_wallpaper_time_land.png");
+            } else {
+                imageLandscape = loadImage("home_wallpaper_land.png");
+            }
+        }
+        if(null == imageLandscape) {
+            imageLandscape = loadImage("home_wallpaper_land.png");
+        }
     }
 
     public void loadPortraitImage() {
-        imagePortrait = loadImage("home_wallpaper_port.png");
+        if(mBattery) {
+            if(mTime) {
+                imagePortrait = loadImage("home_wallpaper_time_battery_port.png");
+            } else {
+                imagePortrait = loadImage("home_wallpaper_battery_port.png");
+            }
+        } else {
+            if(mTime) {
+                imagePortrait = loadImage("home_wallpaper_time_port.png");
+            } else {
+                imagePortrait = loadImage("home_wallpaper_port.png");
+            }
+        }
+        if(null == imagePortrait) {
+            imagePortrait = loadImage("home_wallpaper_port.png");
+        }
     }
 
     public void cleanup() {
