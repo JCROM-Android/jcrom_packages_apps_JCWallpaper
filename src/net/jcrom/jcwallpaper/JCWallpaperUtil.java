@@ -18,6 +18,9 @@ import android.view.Surface;
 import android.view.WindowManager;
 import java.io.File;
 import java.lang.reflect.Method;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 
 public class JCWallpaperUtil {
     WallpaperService service;
@@ -38,6 +41,7 @@ public class JCWallpaperUtil {
     Integer density = null;
     boolean mBattery = false;
     boolean mTime = false;
+    private SharedPreferences mFullHomePrefs;
 
     private static final String TAG = "JCWallpaper";
 
@@ -47,6 +51,7 @@ public class JCWallpaperUtil {
         bitmapPaint = new Paint();
         bitmapPaint.setFilterBitmap(true);
         bitmapPaint.setDither(true);
+        mFullHomePrefs = service.getApplicationContext().getSharedPreferences("full_home", Context.MODE_WORLD_READABLE|Context.MODE_WORLD_WRITEABLE|Context.MODE_MULTI_PROCESS);
         
         try {
            DisplayMetrics metrics = service.getBaseContext().getResources().getDisplayMetrics();
@@ -86,7 +91,7 @@ public class JCWallpaperUtil {
         int width = canvas.getWidth();
         int height = canvas.getHeight();
 
-		//compensateForBar = true;
+		compensateForBar = true;
         
         if(compensateForBar) {
             int fullScreenWidth = -1;
@@ -263,6 +268,9 @@ public class JCWallpaperUtil {
 
     public void setBattery(boolean set) {
         mBattery = set;
+        Editor e = mFullHomePrefs.edit();
+        e.putBoolean("battery", set);
+        e.commit();
     }
     public boolean getBattery() {
         return mBattery;
@@ -270,6 +278,9 @@ public class JCWallpaperUtil {
 
     public void setTime(boolean set) {
         mTime = set;
+        Editor e = mFullHomePrefs.edit();
+        e.putBoolean("time", set);
+        e.commit();
     }
     public boolean getTime() {
         return mTime;
