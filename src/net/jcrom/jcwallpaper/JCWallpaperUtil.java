@@ -263,7 +263,25 @@ public class JCWallpaperUtil {
         builder.append(File.separator);
         builder.append(fileName);
         String filePath = builder.toString();
-        return BitmapFactory.decodeFile(filePath);        
+        String extension = checkThemeFile(filePath);
+        return BitmapFactory.decodeFile(filePath + extension);        
+    }
+
+    private String checkThemeFile(String filename) {
+        String extension = ".png";
+        File file = null;
+
+        file = new File(filename + ".png");
+        if(file.exists()) {
+            extension = ".png";
+        }else {
+            file = new File(filename + ".jpg");
+            if(file.exists()) {
+                extension = ".jpg";
+            }
+        }
+
+        return extension;
     }
 
     public void setBattery(boolean set) {
@@ -289,38 +307,38 @@ public class JCWallpaperUtil {
     public void loadLandscapeImage() {
         if(mBattery) {
             if(mTime) {
-                imageLandscape = loadImage("home_wallpaper_time_battery_land.png");
+                imageLandscape = loadImage("home_wallpaper_time_battery_land");
             } else {
-                imageLandscape = loadImage("home_wallpaper_battery_land.png");
+                imageLandscape = loadImage("home_wallpaper_battery_land");
             }
         } else {
             if(mTime) {
-                imageLandscape = loadImage("home_wallpaper_time_land.png");
+                imageLandscape = loadImage("home_wallpaper_time_land");
             } else {
-                imageLandscape = loadImage("home_wallpaper_land.png");
+                imageLandscape = loadImage("home_wallpaper_land");
             }
         }
         if(null == imageLandscape) {
-            imageLandscape = loadImage("home_wallpaper_land.png");
+            imageLandscape = loadImage("home_wallpaper_land");
         }
     }
 
     public void loadPortraitImage() {
         if(mBattery) {
             if(mTime) {
-                imagePortrait = loadImage("home_wallpaper_time_battery_port.png");
+                imagePortrait = loadImage("home_wallpaper_time_battery_port");
             } else {
-                imagePortrait = loadImage("home_wallpaper_battery_port.png");
+                imagePortrait = loadImage("home_wallpaper_battery_port");
             }
         } else {
             if(mTime) {
-                imagePortrait = loadImage("home_wallpaper_time_port.png");
+                imagePortrait = loadImage("home_wallpaper_time_port");
             } else {
-                imagePortrait = loadImage("home_wallpaper_port.png");
+                imagePortrait = loadImage("home_wallpaper_port");
             }
         }
         if(null == imagePortrait) {
-            imagePortrait = loadImage("home_wallpaper_port.png");
+            imagePortrait = loadImage("home_wallpaper_port");
         }
     }
 
