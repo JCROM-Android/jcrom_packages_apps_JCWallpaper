@@ -153,10 +153,6 @@ public class JCWallpaperService extends WallpaperService {
         @Override
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
-            
-            IntentFilter filter = new IntentFilter(Intent.ACTION_USER_PRESENT);
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            filter.addAction(Intent.ACTION_SCREEN_ON);
 
             mReceiver = new BroadcastReceiver() {
 
@@ -223,6 +219,8 @@ public class JCWallpaperService extends WallpaperService {
                             removeAndPost();
                         }
 
+                    } else if (ac.equals(Intent.ACTION_USER_PRESENT)) {
+                        removeAndPost();
                     }
                 }
             };
@@ -288,13 +286,22 @@ public class JCWallpaperService extends WallpaperService {
                 registerReceiver(mReceiver, filter);
                 receiver = true;
                 handler.post(drawRunner);
+
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.JcromFullScreen");
+                intent.putExtra("check_home", "true");
+                sendBroadcast(intent);
             } else {
                 if(receiver) {
                     unregisterReceiver(mReceiver);
                     receiver = false;
                 }
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.JcromFullScreen");
+                intent.putExtra("check_home", "false");
+                sendBroadcast(intent);
             }
         }
-        
+
     }
 }
