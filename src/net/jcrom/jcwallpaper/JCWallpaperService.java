@@ -286,20 +286,11 @@ public class JCWallpaperService extends WallpaperService {
                 registerReceiver(mReceiver, filter);
                 receiver = true;
                 handler.post(drawRunner);
-
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.JcromFullScreen");
-                intent.putExtra("check_home", "true");
-                sendBroadcast(intent);
             } else {
                 if(receiver) {
                     unregisterReceiver(mReceiver);
                     receiver = false;
                 }
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.JcromFullScreen");
-                intent.putExtra("check_home", "false");
-                sendBroadcast(intent);
             }
         }
 
